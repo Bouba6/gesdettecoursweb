@@ -1,0 +1,50 @@
+@model gestiondette.Models.Client
+
+@{
+    Layout = "_layout";
+}
+
+
+
+<main class="p-4 sm:ml-64 overflow-hidden">
+    <h4>Client</h4>
+    <hr />
+    <div class="row">
+        <div class="md:w-xgg sm:w-900 mx-auto p-6 border-t-black shadow-md border-2 rounded-md m-6">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-6 w-full">
+                    <label asp-for="Surnom" class="control-label block mb-2 text-sm font-medium text-gray-900"></label>
+                    <input asp-for="Surnom"
+                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50" />
+                    <span asp-validation-for="Surnom" class="text-danger"></span>
+                </div>
+                <div class="mb-6 w-full">
+                    <label asp-for="Telephone"
+                        class="control-label block mb-2 text-sm font-medium text-gray-900"></label>
+                    <input asp-for="Telephone"
+                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50" />
+                    <span asp-validation-for="Telephone" class="text-danger"></span>
+                </div>
+                <div class="mb-6 w-full">
+                    <label asp-for="Adresse" class="control-label block mb-2 text-sm font-medium text-gray-900"></label>
+                    <input asp-for="Adresse"
+                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50" />
+                    <span asp-validation-for="Adresse" class="text-danger"></span>
+                </div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="flex justify-end mt-4 space-x-2">
+                    <input type="submit" value="save"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+</main>

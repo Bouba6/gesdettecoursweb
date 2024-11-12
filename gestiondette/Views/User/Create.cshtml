@@ -1,0 +1,64 @@
+@model gestiondette.Models.User
+
+@{
+    Layout = "_layout";
+}
+
+<main class="p-4 sm:ml-64  overflow-hidden">
+    <div class="flex flex-col justify-center items-center ">
+        <h1 class="text-3xl font-bold">Ajout User</h1>
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-user">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+        </svg>
+
+        <div class="md:w-xgg sm:w-xgg mx-auto p-6   border-t-black shadow-md border-2 rounded-md m-6">
+            <form asp-action="Create">
+                <div class="mb-6 w-full">
+                    <label asp-for="Login" for="large-input"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-blue-200">
+                        Login</label>
+                    <input asp-for="Login"
+                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <span asp-validation-for="Login" class="text-danger"></span>
+                </div>
+                <div class="mb-6 w-full">
+                    <label asp-for="Email" for="large-input"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-blue-200">
+                        Email</label>
+                    <input asp-for="Email"
+                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-6 w-full">
+                    <label asp-for="Password" for="large-input"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-blue-200">
+                        Password</label>
+                    <input asp-for="Password"
+                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="mb-6 w-full">
+                    <label asp-for="Role"
+                        class="control-label block mb-2 text-sm font-medium text-gray-900 dark:text-blue-200">Role</label>
+                    <select asp-for="Role"
+                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></select>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+
+
+                <div class="mt-4 text-center flex flex-row space-x-2 justify-end">
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold
+                py-2 px-4 rounded ml-2">Cancel</button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold
+                py-2 px-4 rounded">Save</button>
+            </form>
+        </div>
+    </div>
+
+
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <a asp-action="Index">Back to List</a></button>
+</main>
