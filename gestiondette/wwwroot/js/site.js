@@ -14,9 +14,10 @@
             passwordField.required = true;
         } else {
             userForm.classList.add('hidden');
-            emailField.required = false;
-            loginField.required = false;
-            passwordField.required = false;
+            emailField.removeAttribute('required');
+            emailField.removeAttribute('data-val-required');
+            loginField.removeAttribute('required');
+            passwordField.removeAttribute('required');
         }
     }
 

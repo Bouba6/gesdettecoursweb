@@ -20,10 +20,25 @@ namespace gestiondette.Controllers
         }
 
         // GET: Client
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 3)
         {
-            return View(await _context.client.ToListAsync());
+
+            var clients = await _context.client
+                                        .Skip((pageNumber - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToListAsync();
+
+
+            int totalClients = await _context.client.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalClients / (double)pageSize);
+
+            // Passer les données et la pagination à la vue
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = pageNumber;
+
+            return View(clients);
         }
+
 
         // GET: Client/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -57,7 +72,7 @@ namespace gestiondette.Controllers
         public async Task<IActionResult> Create([Bind("Surnom,Telephone,Adresse,Solde,Id,CreateAt,UpdateAt,User")] Client client)
         {
 
-
+            Console.WriteLine(ModelState);
             if (ModelState.IsValid)
             {
                 client.OnPrePersist();
@@ -71,7 +86,7 @@ namespace gestiondette.Controllers
                 }
                 else
                 {
-                    client.User = null; // Ensure User is null if checkbox is unchecked
+                    client.User = null;
                 }
 
                 _context.Add(client);

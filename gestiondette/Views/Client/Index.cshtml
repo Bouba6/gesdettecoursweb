@@ -70,5 +70,32 @@
                 }
             </tbody>
         </table>
+
+    </div>
+    <div class="mt-4 flex justify-center items-center space-x-4">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <a asp-action="Index" asp-route-pageNumber="@(ViewBag.CurrentPage - 1)" asp-route-pageSize="3"
+                class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">
+                Précédent
+            </a>
+        }
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a asp-action="Index" asp-route-pageNumber="@i" asp-route-pageSize="@(ViewBag.PageSize)"
+                class="px-3 py-2 @(i == ViewBag.CurrentPage ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700") rounded hover:bg-blue-500">
+                @i
+            </a>
+        }
+
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <a asp-action="Index" asp-route-pageNumber="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="3"
+                class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">
+                Suivant
+            </a>
+        }
     </div>
 </main>

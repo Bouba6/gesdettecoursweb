@@ -6,26 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using gestiondette.Models;
-using gestiondette.Enum;
 
 namespace gestiondette.Controllers
 {
-    public class UserController : Controller
+    public class DetailDetteController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public UserController(ApplicationDbContext context)
+        public DetailDetteController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: User
+        // GET: DetailDette
         public async Task<IActionResult> Index()
         {
-            return View(await _context.users.ToListAsync());
+            return View(await _context.detaildette.ToListAsync());
         }
 
-        // GET: User/Details/5
+        // GET: DetailDette/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,51 +32,39 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users
+            var detailDette = await _context.detaildette
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (detailDette == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(detailDette);
         }
 
-        // GET: User/Create
+        // GET: DetailDette/Create
         public IActionResult Create()
         {
-            var roles = System.Enum.GetValues(typeof(Role))
-            .Cast<Role>()
-            .Select(r => new SelectListItem
-            {
-                Value = r.ToString(),
-                Text = r.ToString()
-            })
-            .ToList();
-
-            ViewData["Roles"] = roles;
             return View();
         }
 
-        // POST: User/Create
+        // POST: DetailDette/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Login,Email,Password,Role,State,Id,CreateAt,UpdateAt")] User user)
+        public async Task<IActionResult> Create([Bind("Id,Qte,CreateAt,UpdateAt")] DetailDette detailDette)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                _context.Add(detailDette);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(detailDette);
         }
 
-
-
-        // GET: User/Edit/5
+        // GET: DetailDette/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,22 +72,22 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users.FindAsync(id);
-            if (user == null)
+            var detailDette = await _context.detaildette.FindAsync(id);
+            if (detailDette == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(detailDette);
         }
 
-        // POST: User/Edit/5
+        // POST: DetailDette/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Login,Email,Password,Role,State,Id,CreateAt,UpdateAt")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Qte,CreateAt,UpdateAt")] DetailDette detailDette)
         {
-            if (id != user.Id)
+            if (id != detailDette.Id)
             {
                 return NotFound();
             }
@@ -109,12 +96,12 @@ namespace gestiondette.Controllers
             {
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(detailDette);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!DetailDetteExists(detailDette.Id))
                     {
                         return NotFound();
                     }
@@ -125,10 +112,10 @@ namespace gestiondette.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(detailDette);
         }
 
-        // GET: User/Delete/5
+        // GET: DetailDette/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,34 +123,34 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users
+            var detailDette = await _context.detaildette
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (detailDette == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(detailDette);
         }
 
-        // POST: User/Delete/5
+        // POST: DetailDette/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.users.FindAsync(id);
-            if (user != null)
+            var detailDette = await _context.detaildette.FindAsync(id);
+            if (detailDette != null)
             {
-                _context.users.Remove(user);
+                _context.detaildette.Remove(detailDette);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool DetailDetteExists(int id)
         {
-            return _context.users.Any(e => e.Id == id);
+            return _context.detaildette.Any(e => e.Id == id);
         }
     }
 }

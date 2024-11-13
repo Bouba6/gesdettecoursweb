@@ -1,0 +1,69 @@
+@model gestiondette.Models.Dette
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+
+<h4>Dette</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MontantRestant" class="control-label"></label>
+                <input asp-for="MontantRestant" class="form-control" />
+                <span asp-validation-for="MontantRestant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MontantVerser" class="control-label"></label>
+                <input asp-for="MontantVerser" class="form-control" />
+                <span asp-validation-for="MontantVerser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EtatDette" class="control-label"></label>
+                <select asp-for="EtatDette" class="form-control"></select>
+                <span asp-validation-for="EtatDette" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Montant" class="control-label"></label>
+                <input asp-for="Montant" class="form-control" />
+                <span asp-validation-for="Montant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateDette" class="control-label"></label>
+                <select asp-for="StateDette" class="form-control"></select>
+                <span asp-validation-for="StateDette" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreateAt" class="control-label"></label>
+                <input asp-for="CreateAt" class="form-control" />
+                <span asp-validation-for="CreateAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdateAt" class="control-label"></label>
+                <input asp-for="UpdateAt" class="form-control" />
+                <span asp-validation-for="UpdateAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>

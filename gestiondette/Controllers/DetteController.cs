@@ -6,26 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using gestiondette.Models;
-using gestiondette.Enum;
 
 namespace gestiondette.Controllers
 {
-    public class UserController : Controller
+    public class DetteController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public UserController(ApplicationDbContext context)
+        public DetteController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: User
+        // GET: Dette
         public async Task<IActionResult> Index()
         {
-            return View(await _context.users.ToListAsync());
+            return View(await _context.dette.ToListAsync());
         }
 
-        // GET: User/Details/5
+        // GET: Dette/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,51 +32,39 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users
+            var dette = await _context.dette
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (dette == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(dette);
         }
 
-        // GET: User/Create
+        // GET: Dette/Create
         public IActionResult Create()
         {
-            var roles = System.Enum.GetValues(typeof(Role))
-            .Cast<Role>()
-            .Select(r => new SelectListItem
-            {
-                Value = r.ToString(),
-                Text = r.ToString()
-            })
-            .ToList();
-
-            ViewData["Roles"] = roles;
             return View();
         }
 
-        // POST: User/Create
+        // POST: Dette/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Login,Email,Password,Role,State,Id,CreateAt,UpdateAt")] User user)
+        public async Task<IActionResult> Create([Bind("MontantRestant,MontantVerser,EtatDette,Montant,StateDette,Id,CreateAt,UpdateAt")] Dette dette)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                _context.Add(dette);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(dette);
         }
 
-
-
-        // GET: User/Edit/5
+        // GET: Dette/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,22 +72,22 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users.FindAsync(id);
-            if (user == null)
+            var dette = await _context.dette.FindAsync(id);
+            if (dette == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(dette);
         }
 
-        // POST: User/Edit/5
+        // POST: Dette/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Login,Email,Password,Role,State,Id,CreateAt,UpdateAt")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("MontantRestant,MontantVerser,EtatDette,Montant,StateDette,Id,CreateAt,UpdateAt")] Dette dette)
         {
-            if (id != user.Id)
+            if (id != dette.Id)
             {
                 return NotFound();
             }
@@ -109,12 +96,12 @@ namespace gestiondette.Controllers
             {
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(dette);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!DetteExists(dette.Id))
                     {
                         return NotFound();
                     }
@@ -125,10 +112,10 @@ namespace gestiondette.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(dette);
         }
 
-        // GET: User/Delete/5
+        // GET: Dette/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,34 +123,34 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users
+            var dette = await _context.dette
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (dette == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(dette);
         }
 
-        // POST: User/Delete/5
+        // POST: Dette/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.users.FindAsync(id);
-            if (user != null)
+            var dette = await _context.dette.FindAsync(id);
+            if (dette != null)
             {
-                _context.users.Remove(user);
+                _context.dette.Remove(dette);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool DetteExists(int id)
         {
-            return _context.users.Any(e => e.Id == id);
+            return _context.dette.Any(e => e.Id == id);
         }
     }
 }

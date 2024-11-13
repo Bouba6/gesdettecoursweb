@@ -6,26 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using gestiondette.Models;
-using gestiondette.Enum;
 
 namespace gestiondette.Controllers
 {
-    public class UserController : Controller
+    public class PaiementController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public UserController(ApplicationDbContext context)
+        public PaiementController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: User
+        // GET: Paiement
         public async Task<IActionResult> Index()
         {
-            return View(await _context.users.ToListAsync());
+            return View(await _context.paiement.ToListAsync());
         }
 
-        // GET: User/Details/5
+        // GET: Paiement/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,51 +32,39 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users
+            var paiement = await _context.paiement
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (paiement == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(paiement);
         }
 
-        // GET: User/Create
+        // GET: Paiement/Create
         public IActionResult Create()
         {
-            var roles = System.Enum.GetValues(typeof(Role))
-            .Cast<Role>()
-            .Select(r => new SelectListItem
-            {
-                Value = r.ToString(),
-                Text = r.ToString()
-            })
-            .ToList();
-
-            ViewData["Roles"] = roles;
             return View();
         }
 
-        // POST: User/Create
+        // POST: Paiement/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Login,Email,Password,Role,State,Id,CreateAt,UpdateAt")] User user)
+        public async Task<IActionResult> Create([Bind("Montant,DatePaiement,Id,CreateAt,UpdateAt")] Paiement paiement)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                _context.Add(paiement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(paiement);
         }
 
-
-
-        // GET: User/Edit/5
+        // GET: Paiement/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,22 +72,22 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users.FindAsync(id);
-            if (user == null)
+            var paiement = await _context.paiement.FindAsync(id);
+            if (paiement == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(paiement);
         }
 
-        // POST: User/Edit/5
+        // POST: Paiement/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Login,Email,Password,Role,State,Id,CreateAt,UpdateAt")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Montant,DatePaiement,Id,CreateAt,UpdateAt")] Paiement paiement)
         {
-            if (id != user.Id)
+            if (id != paiement.Id)
             {
                 return NotFound();
             }
@@ -109,12 +96,12 @@ namespace gestiondette.Controllers
             {
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(paiement);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!PaiementExists(paiement.Id))
                     {
                         return NotFound();
                     }
@@ -125,10 +112,10 @@ namespace gestiondette.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(paiement);
         }
 
-        // GET: User/Delete/5
+        // GET: Paiement/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,34 +123,34 @@ namespace gestiondette.Controllers
                 return NotFound();
             }
 
-            var user = await _context.users
+            var paiement = await _context.paiement
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (paiement == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(paiement);
         }
 
-        // POST: User/Delete/5
+        // POST: Paiement/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.users.FindAsync(id);
-            if (user != null)
+            var paiement = await _context.paiement.FindAsync(id);
+            if (paiement != null)
             {
-                _context.users.Remove(user);
+                _context.paiement.Remove(paiement);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool PaiementExists(int id)
         {
-            return _context.users.Any(e => e.Id == id);
+            return _context.paiement.Any(e => e.Id == id);
         }
     }
 }

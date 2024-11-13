@@ -15,7 +15,7 @@
         </svg>
 
         <div class="md:w-xgg sm:w-xgg mx-auto p-6   border-t-black shadow-md border-2 rounded-md m-6">
-            <form asp-action="Create">
+            <form asp-action="Create" method="post">
                 <div class="mb-6 w-full">
                     <label asp-for="Login" for="large-input"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-blue-200">
@@ -44,7 +44,13 @@
                     <label asp-for="Role"
                         class="control-label block mb-2 text-sm font-medium text-gray-900 dark:text-blue-200">Role</label>
                     <select asp-for="Role"
-                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></select>
+                        class="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-xl ">
+                        <option value="">-- Select a Role --</option>
+                        @foreach (var item in ViewData["Roles"] as List<SelectListItem>)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
                     <span asp-validation-for="Role" class="text-danger"></span>
                 </div>
 

@@ -1,13 +1,22 @@
 using Microsoft.EntityFrameworkCore;
+using gestiondette.Data.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
+string connectionString = builder.Configuration.GetConnectionString("PostgresConnextion")!;
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-   options.UseNpgsql("Host=localhost;Port=5433;Database=gesdettec#;Username=postgres;Password=root;"));
+   options.UseNpgsql(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    SeedData.Initialize(services, context); // Insère les données si nécessaire
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
