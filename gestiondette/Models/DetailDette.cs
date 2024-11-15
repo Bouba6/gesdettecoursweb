@@ -3,13 +3,6 @@ namespace gestiondette.Models
     public class DetailDette() : AbstractEntity()
     {
 
-
-
-
-
-
-
-
         public int Id { get; set; }
         public double Qte { get; set; }
         public Dette Dette { get; set; }

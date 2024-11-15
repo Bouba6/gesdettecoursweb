@@ -7,7 +7,7 @@ namespace gestiondette.Data.Fixtures
         public static void Initialize(IServiceProvider serviceProvider, ApplicationDbContext context)
         {
             // Vérifier si des données existent déjà dans la table Clients
-            if (context.article.Any())
+            if (context.dette.Any())
             {
                 return;   // La base de données est déjà peuplée
             }
@@ -40,6 +40,7 @@ namespace gestiondette.Data.Fixtures
                     Login = $"Login{i + 1}",
                     Password = $"Password{i + 1}"
                 });
+
                 dettes.Add(new Dette
                 {
                     Client = clients[i],
@@ -56,6 +57,7 @@ namespace gestiondette.Data.Fixtures
             context.article.AddRange(articles);
             context.client.AddRange(clients);
             context.users.AddRange(users);
+            context.dette.AddRange(dettes);
 
 
             // Sauvegarder les changements dans la base de données

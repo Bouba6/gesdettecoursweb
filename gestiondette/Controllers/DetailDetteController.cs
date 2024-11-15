@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using gestiondette.Models;
-
+using gestiondette.Helpers;
 namespace gestiondette.Controllers
 {
     public class DetailDetteController : Controller
@@ -63,6 +63,33 @@ namespace gestiondette.Controllers
             }
             return View(detailDette);
         }
+        public IActionResult AddDetailToSession(int articleId, int quantity)
+        {
+            // Retrieve the existing details from the session or create a new list
+            var detailsList = HttpContext.Session.GetObjectFromJson<List<DetailDette>>("DetailDettes") ?? new List<DetailDette>();
+
+            // Assuming Client and Article are already fetched by their IDs
+
+            var article = _context.article.FirstOrDefault(a => a.Id == articleId);
+
+            // Create a new DetailDette and add it to the list
+            if (article != null)
+            {
+                var detail = new DetailDette
+                {
+
+                    Article = article,
+                    Qte = quantity
+                };
+                detailsList.Add(detail);
+
+                // Update the session with the new list
+                HttpContext.Session.SetObjectAsJson("DetailDettes", detailsList);
+            }
+
+            return RedirectToAction("Create", "Dette");
+        }
+
 
         // GET: DetailDette/Edit/5
         public async Task<IActionResult> Edit(int? id)

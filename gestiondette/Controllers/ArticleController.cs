@@ -19,9 +19,47 @@ namespace gestiondette.Controllers
         }
 
         // GET: Article
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string status, int pageNumber = 1, int pageSize = 3)
         {
-            return View(await _context.article.ToListAsync());
+            var articles = from d in _context.article
+                           select d;
+
+            // Filter by status
+            if (!string.IsNullOrEmpty(status))
+            {
+                if (status == "disponible")
+                {
+                    articles = articles.Where(d => d.QteStock > 0);
+                }
+                else if (status == "indisponible")
+                {
+                    articles = articles.Where(d => d.QteStock < 0);
+                }
+                else
+                {
+                    articles = from d in _context.article
+                               select d;
+                }
+            }
+
+            // Calculate total number of filtered items
+            int totalClients = await articles.CountAsync();
+
+            // Apply pagination if pageSize > 0
+            if (pageSize > 0)
+            {
+                articles = articles.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
+
+            // Calculate total pages based on pageSize
+            int totalPages = (int)Math.Ceiling(totalClients / (double)pageSize);
+
+            // Pass total pages and current page to ViewBag
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = pageNumber;
+
+            // Return the view with the paginated and filtered data
+            return View(await articles.ToListAsync());
         }
 
         // GET: Article/Details/5

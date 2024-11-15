@@ -5,30 +5,20 @@ namespace gestiondette.Models
     {
 
 
-        private double montant;
-
-        private DateTime datePaiement;
-
-        private Dette dette;
 
 
+        public double Montant { get; set; }
+        public DateTime? DatePaiement { get; set; }
 
-        public double Montant { get => montant; set => montant = value; }
-        public DateTime DatePaiement { get => datePaiement; set => datePaiement = value; }
-
-        public Dette Dette { get => dette; set => dette = value; }
-
-
-
-
+        public Dette? Dette { get; set; }
 
 
         public override string ToString()
         {
             return "Client[" +
                     "id=" + Id +
-                    ", montant='" + montant + '\'' +
-                    ", date='" + datePaiement + '\'';
+                    ", montant='" + Montant + '\'' +
+                    ", date='" + DatePaiement + '\'';
         }
 
     }

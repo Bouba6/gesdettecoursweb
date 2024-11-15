@@ -9,8 +9,8 @@ namespace gestiondette.Models
 
 
 
-        private List<DetailDette> detailDettes = new List<DetailDette>();
-        private List<Paiement> paiements = new List<Paiement>();
+        private List<DetailDette>? detailDettes = new List<DetailDette>();
+        private List<Paiement>? paiements = new List<Paiement>();
 
         private StateDette stateDette;
 
@@ -22,29 +22,20 @@ namespace gestiondette.Models
 
         // Properties
 
-        public Client Client { get; set; }
+        public Client? Client { get; set; }
         public double MontantRestant { get; set; }
         public double MontantVerser { get; set; }
-        public List<DetailDette> DetailDettes { get => detailDettes; }
+        public List<DetailDette>? DetailDettes { get; set; }
         public EtatDette EtatDette { get; set; }
         public double Montant { get; set; }
-        public List<Paiement> Paiements { get => paiements; }
+        public List<Paiement>? Paiements { get; set; } = new List<Paiement>();
 
         public StateDette StateDette { get; set; }
 
         // Methods
-        public void SetdetailDettes(DetailDette detailDette)
-        {
-            Montant += detailDette.Qte * detailDette.Article.Prix;
-            detailDettes.Add(detailDette);
-        }
 
-        public void SetPaiements(Paiement paiement)
-        {
-            MontantVerser += paiement.Montant;
-            MontantRestant -= paiement.Montant;
-            paiements.Add(paiement);
-        }
+
+
 
         public override string ToString()
         {

@@ -48,7 +48,7 @@
 
 /* Style quand le switch est activé (input:checked) */
 input:checked+.slider {
-  background-color: #4CAF50;
+  background-color: #534ee9;
 }
 
 input:checked+.slider:before {

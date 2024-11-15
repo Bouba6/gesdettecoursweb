@@ -1,69 +1,59 @@
 @model gestiondette.Models.Dette
 
 @{
-    Layout = null;
+    Layout = "_layout";
 }
 
-<!DOCTYPE html>
+<main class="p-6 sm:ml-64 overflow-hidden bg-gray-50">
+    <div class="flex flex-col justify-center items-center">
+        <div class="w-full  flex justify-end">
+            <a href="@Url.Action("Create", "Paiement", new { id = Model.Id })"
+                class="p-4 text-white bg-blue-400 rounded-lg">
+                Faire Paiement
+            </a>
+        </div>
+        <h1 class="text-4xl font-semibold text-gray-800 mb-6">Detail Dette</h1>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
+        <!-- Card Container for Content -->
+        <div class="w-full sm:w-4/5 md:w-1/2 mx-auto p-6 bg-white border-t-4 border-blue-500 shadow-lg rounded-lg">
+            <div class="flex flex-col gap-6">
+                <!-- Each term (dt) and description (dd) inside flex containers with inputs for values -->
+                <div class="flex flex-col">
+                    <label for="MontantRestant" class="text-lg font-medium text-gray-700">Montant Restant</label>
+                    <input type="text" id="MontantRestant" name="MontantRestant"
+                        value="@Html.DisplayFor(model => model.MontantRestant)"
+                        class="mt-2 p-2 border border-gray-300 rounded-md text-gray-500" readonly />
+                </div>
+                <div class="flex flex-col">
+                    <label for="MontantVerser" class="text-lg font-medium text-gray-700">Montant Versé</label>
+                    <input type="text" id="MontantVerser" name="MontantVerser"
+                        value="@Html.DisplayFor(model => model.MontantVerser)"
+                        class="mt-2 p-2 border border-gray-300 rounded-md text-gray-500" readonly />
+                </div>
+                <div class="flex flex-col">
+                    <label for="EtatDette" class="text-lg font-medium text-gray-700">État Dette</label>
+                    <input type="text" id="EtatDette" name="EtatDette"
+                        value="@Html.DisplayFor(model => model.EtatDette)"
+                        class="mt-2 p-2 border border-gray-300 rounded-md text-gray-500" readonly />
+                </div>
+                <div class="flex flex-col">
+                    <label for="Montant" class="text-lg font-medium text-gray-700">Montant</label>
+                    <input type="text" id="Montant" name="Montant" value="@Html.DisplayFor(model => model.Montant)"
+                        class="mt-2 p-2 border border-gray-300 rounded-md text-gray-500" readonly />
+                </div>
+                <div class="flex flex-col">
+                    <label for="StateDette" class="text-lg font-medium text-gray-700">État de la Dette</label>
+                    <input type="text" id="StateDette" name="StateDette"
+                        value="@Html.DisplayFor(model => model.StateDette)"
+                        class="mt-2 p-2 border border-gray-300 rounded-md text-gray-500" readonly />
+                </div>
+            </div>
+        </div>
 
-<div>
-    <h4>Dette</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MontantRestant)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MontantRestant)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MontantVerser)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MontantVerser)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EtatDette)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EtatDette)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Montant)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Montant)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StateDette)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StateDette)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreateAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreateAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdateAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdateAt)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-</body>
-</html>
+        <!-- Action Links -->
+        <div class="mt-6 text-center">
+            <a href="@Url.Action("Edit", new { id = Model?.Id })" class="text-blue-600 hover:underline mx-4">Edit</a> |
+            <a href="@Url.Action("Index")" class="text-blue-600 hover:underline mx-4">Back to List</a>
+        </div>
+    </div>
+</main>

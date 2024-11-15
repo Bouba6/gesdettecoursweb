@@ -1,69 +1,45 @@
 @model gestiondette.Models.Dette
 
 @{
-    Layout = null;
+    Layout = "_layout";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
-</head>
-<body>
+<main class="p-4 sm:ml-64 overflow-hidden">
+    <div class="flex flex-col justify-center items-center">
+        <h1 class="text-3xl font-bold">Ajout Dette</h1>
+        <div class="md:w-xgg sm:w-900 mx-auto p-6 border-t-black shadow-md border-2 rounded-md m-6">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
 
-<h4>Dette</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MontantRestant" class="control-label"></label>
-                <input asp-for="MontantRestant" class="form-control" />
-                <span asp-validation-for="MontantRestant" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MontantVerser" class="control-label"></label>
-                <input asp-for="MontantVerser" class="form-control" />
-                <span asp-validation-for="MontantVerser" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EtatDette" class="control-label"></label>
-                <select asp-for="EtatDette" class="form-control"></select>
-                <span asp-validation-for="EtatDette" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Montant" class="control-label"></label>
-                <input asp-for="Montant" class="form-control" />
-                <span asp-validation-for="Montant" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StateDette" class="control-label"></label>
-                <select asp-for="StateDette" class="form-control"></select>
-                <span asp-validation-for="StateDette" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateAt" class="control-label"></label>
-                <input asp-for="CreateAt" class="form-control" />
-                <span asp-validation-for="CreateAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdateAt" class="control-label"></label>
-                <input asp-for="UpdateAt" class="form-control" />
-                <span asp-validation-for="UpdateAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+
+                <div class="">
+                    <label for="Client">Client</label>
+                    <select name="ClientId" id="Client"
+                        class="p-2 mt-3 border border-gray-300 w-full rounded-md focus:outline-none focus:border-blue-500">
+                        <option value="">Select a Client</option>
+                        @if (ViewBag.Clients != null)
+                        {
+                            foreach (var client in ViewBag.Clients)
+                            {
+                                <option value="@client.Id">@client.Surnom</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-6 w-full">
+                    <label asp-for="Montant" class="block mb-2 text-sm font-medium text-gray-900">Téléphone</label>
+                    <input asp-for="Montant"
+                        class="form-control block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50" />
+                    <span asp-validation-for="Montant" class="text-red-500"></span>
+                </div>
+                <!-- Bouton pour enregistrer la dette -->
+                <div class="flex justify-end mt-4">
+                    <input type="submit" value="Créer"
+                        class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-</body>
-</html>
+</main>

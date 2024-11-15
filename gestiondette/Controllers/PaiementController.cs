@@ -19,9 +19,14 @@ namespace gestiondette.Controllers
         }
 
         // GET: Paiement
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
-            return View(await _context.paiement.ToListAsync());
+            var paiements = await _context.paiement
+                .Where(p => p.Dette.Id == id)
+                .ToListAsync();
+
+            ViewBag.DetteId = id; // Optionnel, pour utilisation dans la vue si besoin
+            return View(paiements);
         }
 
         // GET: Paiement/Details/5
@@ -42,9 +47,25 @@ namespace gestiondette.Controllers
             return View(paiement);
         }
 
-        // GET: Paiement/Create
-        public IActionResult Create()
+        public async Task<IActionResult> IndexByDette(int id)
         {
+            var paiements = await _context.paiement
+                .Where(p => p.Dette.Id == id)
+                .ToListAsync();
+
+            ViewBag.DetteId = id; // Optionnel, pour utilisation dans la vue si besoin
+            return View(paiements);
+        }
+
+        // GET: Paiement/Create
+        public IActionResult Create(int id)
+        {
+            if (id == null)
+            {
+                return NotFound("ID is missing.");
+            }
+
+            ViewData["DetteId"] = id;
             return View();
         }
 
@@ -53,15 +74,48 @@ namespace gestiondette.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Montant,DatePaiement,Id,CreateAt,UpdateAt")] Paiement paiement)
+        public async Task<IActionResult> Create(int Montant, int? id)
         {
+
             if (ModelState.IsValid)
             {
-                _context.Add(paiement);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var dette = await _context.dette.FindAsync(id);
+                if (dette == null)
+                {
+                    return NotFound("Dette not found.");
+                }
+                if (Montant < dette.MontantRestant)
+                {
+                    Paiement paiement = new Paiement();
+
+                    dette.MontantRestant -= paiement.Montant;
+                    dette.MontantVerser += paiement.Montant;
+                    paiement.DatePaiement = DateTime.UtcNow;
+                    paiement.Montant = Montant;
+                    paiement.Dette = dette;
+
+                    _context.Add(paiement);
+
+                    dette.Paiements.Add(paiement);
+                    _context.dette.Update(dette);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine("-------------------************************************------------------------------");
+                    Console.WriteLine(paiement.Id);
+                    Console.WriteLine("----------------------**********************************---------------------------");
+                    // return NotFound(paiement.Id);
+                    return RedirectToAction("Index", new { id = dette.Id });
+                }
+                else
+                {
+
+                    ModelState.AddModelError("Montant", "montant invalide");
+                }
+
+
+
+
             }
-            return View(paiement);
+            return View();
         }
 
         // GET: Paiement/Edit/5
