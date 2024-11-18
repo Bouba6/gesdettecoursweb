@@ -1,0 +1,54 @@
+@model gestiondette.Models.Dette
+
+@{
+    Layout = "_layout";
+}
+
+
+<main class="p-4 sm:ml-64 overflow-hidden">
+    <div class="flex flex-col justify-center items-center">
+        <h1 class="text-3xl font-bold">Ajout Dette</h1>
+        <div class="md:w-xgg sm:w-900 mx-auto p-6 border-t-black shadow-md border-2 rounded-md m-6">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+
+                <div class="">
+                    <label for="Client">Client</label>
+                    <select name="ClientId" id="Client"
+                        class="p-2 mt-3 border border-gray-300 w-full rounded-md focus:outline-none focus:border-blue-500">
+                        <option value="">Select a Client</option>
+                        @if (ViewBag.Clients != null)
+                        {
+                            foreach (var client in ViewBag.Clients)
+                            {
+                                <option value="@client.Id">@client.Surnom</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="flex flex-row">
+                    <div class="">
+                        <label for="Client">Client</label>
+                        <select name="ClientId" id="Client"
+                            class="p-2 mt-3 border border-gray-300 w-full rounded-md focus:outline-none focus:border-blue-500">
+                            <option value="">Select a Client</option>
+                            @if (ViewBag.Clients != null)
+                            {
+                                foreach (var client in ViewBag.Clients)
+                                {
+                                    <option value="@client.Id">@client.Surnom</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+</main>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using gestiondette.Models;
 using gestiondette.Enum;
+using gestiondette.Helpers;
 
 namespace gestiondette.Controllers
 {
@@ -87,49 +88,145 @@ namespace gestiondette.Controllers
         // GET: Dette/Create
         public async Task<IActionResult> Create()
         {
+
             var clients = await _context.client.ToListAsync();
             var articles = await _context.article.ToListAsync();
             ViewBag.Clients = clients;
             ViewBag.Articles = articles;
+            var panier = HttpContext.Session.GetObjectFromJson<Panier>("panier") ?? new Panier();
+            // HttpContext.Session.Remove("panier");
+            ViewBag.panier = panier;
+            // ViewBag.neub = "enabled";
+            if (TempData["selectedClient"] != null)
+            {
+
+                int selectedClient = (int)TempData["selectedClient"];
+                ViewBag.selectedClient = selectedClient;
+                Console.WriteLine("******************************* cac'est mon idddddddddddddd  **************************");
+                Console.WriteLine($"ClientId: {ViewBag.selectedClient}");
+                Console.WriteLine("******************************* **************************");
+
+                Client client = _context.client.FirstOrDefault(c => c.Id == selectedClient);
+
+                Console.WriteLine("******************************* cac'est mon client  **************************");
+                Console.WriteLine($"ClientId: {client}");
+                Console.WriteLine("******************************* **************************");
+                panier.client = client;
+                HttpContext.Session.SetObjectAsJson("panier", panier);
+                Console.WriteLine("******************************* cac'est mon panier  **************************");
+                Console.WriteLine($"ClientId: {panier.client}");
+                Console.WriteLine("******************************* **************************");
+                // ViewBag.neub = "disabled";
+                // Console.WriteLine(selectedClient);
+
+            }
+
+
+
+
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> create()
+        {
+
+
+            var panier = HttpContext.Session.GetObjectFromJson<Panier>("panier") ?? new Panier();
+            var dette = new Dette();
+            dette.StateDette = StateDette.DESARCHIVER;
+            dette.CreateAt = DateTime.UtcNow;
+            Console.WriteLine("******************************* **************************");
+            Console.WriteLine("je suis la mon bbebebebebebbebebebebebebebbebbebe");
+            Console.WriteLine(panier.client);
+            Console.WriteLine("*************************************************************");
+
+            int ClientId = panier.client.Id;
+
+            dette.Client = _context.client.FirstOrDefault(c => c.Id == ClientId);
+            double MontantTotal = 0.0;
+            foreach (DetailDette detailDette in panier.detailDettes)
+            {
+                detailDette.Dette = dette;
+                detailDette.ArticleId = detailDette.Article.Id;
+                _context.Add(detailDette);
+                MontantTotal += detailDette.Total;
+            }
+            dette.Montant = MontantTotal;
+            dette.MontantRestant = MontantTotal;
+            dette.MontantVerser = 0.0;
+            dette.EtatDette = EtatDette.ENCOURS;
+            dette.UpdateAt = DateTime.UtcNow;
+            _context.Add(dette);
+            await _context.SaveChangesAsync();
+            HttpContext.Session.Remove("panier");
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public IActionResult AjouterArticle(int articleId, int qte, string ClientId)
+        {
+
+            var article = _context.article.FirstOrDefault(a => a.Id == articleId);
+            Console.WriteLine("'''''''''''''*************************************''''''''''''''''''''''''");
+            Console.WriteLine($"Article: {article}, Quantity: {qte}");
+            Console.WriteLine("''''''''''''************************************************************'''''''''''''''''''''''''");
+            var panier = HttpContext.Session.GetObjectFromJson<Panier>("panier") ?? new Panier();
+
+
+            panier.AjouterArticles(article, qte);
+            HttpContext.Session.SetObjectAsJson("panier", panier);
+
+            // Faire un dump du panier
+
+            if (ViewBag.selectedClient == null)
+            {
+                ViewBag.selectedClient = Convert.ToInt32(ClientId);
+                TempData["selectedClient"] = ViewBag.selectedClient; // Sto
+                Console.WriteLine("******************************* **************************");
+                Console.WriteLine($"ClientId: {ViewBag.selectedClient}");
+                Console.WriteLine("******************************* **************************");
+            }
+
+            return RedirectToAction("Create");
         }
 
         // POST: Dette/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Dette dette)
-        {
-            var id = int.Parse(Request.Form["ClientId"]!);
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Create(Dette dette)
+        // {
+        //     var id = int.Parse(Request.Form["ClientId"]!);
 
 
-            if (ModelState.IsValid)
-            {
+        //     if (ModelState.IsValid)
+        //     {
 
-                var client = await _context.client.FindAsync(id);
+        //         var client = await _context.client.FindAsync(id);
 
-                if (client == null)
-                {
-                    // Handle the case where the client is not found
-                    ModelState.AddModelError("", "Client not found.");
-                    return View(dette);
-                }
+        //         if (client == null)
+        //         {
+        //             // Handle the case where the client is not found
+        //             ModelState.AddModelError("", "Client not found.");
+        //             return View(dette);
+        //         }
 
-                // Now set the full Client object to the Dette model
-                dette.Client = client;
-                dette.MontantVerser = 0.0;
-                dette.MontantRestant = 0.0;
-                dette.EtatDette = EtatDette.VALIDER;
-                dette.StateDette = StateDette.DESARCHIVER;
+        //         // Now set the full Client object to the Dette model
+        //         dette.Client = client;
+        //         dette.MontantVerser = 0.0;
+        //         dette.MontantRestant = dette.Montant;
+        //         dette.EtatDette = EtatDette.VALIDER;
+        //         dette.StateDette = StateDette.DESARCHIVER;
 
-                _context.Add(dette);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+        //         _context.Add(dette);
+        //         await _context.SaveChangesAsync();
+        //         return RedirectToAction(nameof(Index));
+        //     }
 
-            return View(dette);
-        }
+        //     return View(dette);
+        // }
 
 
         // GET: Dette/Edit/5

@@ -88,8 +88,8 @@ namespace gestiondette.Controllers
                 {
                     Paiement paiement = new Paiement();
 
-                    dette.MontantRestant -= paiement.Montant;
-                    dette.MontantVerser += paiement.Montant;
+                    dette.MontantRestant -= Montant;
+                    dette.MontantVerser += Montant;
                     paiement.DatePaiement = DateTime.UtcNow;
                     paiement.Montant = Montant;
                     paiement.Dette = dette;

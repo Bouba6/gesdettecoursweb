@@ -157,7 +157,7 @@ namespace gestiondette.Controllers
             }
 
             var client = await _context.client
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
             if (client == null)
             {
                 return NotFound();
